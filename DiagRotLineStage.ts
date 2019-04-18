@@ -211,3 +211,25 @@ class DiagRotLine {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    drl : DiagRotLine = new DiagRotLine()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.drl.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.drl.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.drl.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
