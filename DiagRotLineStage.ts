@@ -35,18 +35,24 @@ class ScaleUtil {
 
 class DrawingUtil {
 
-    static drawDiagRotLine(context : CanvasRenderingContext2D, deg : number, size : number, sc : number) {
+    static drawDiagLine(context : CanvasRenderingContext2D, deg : number, size : number) {
           context.save()
           context.rotate(deg)
           context.beginPath()
           context.moveTo(0, 0)
-          context.lineTo(size * Math.sqrt(2), size * Math.sqrt(2))
-          context.stroke()
-          context.beginPath()
-          context.moveTo(size, size)
-          context.lineTo(size - 2 * size * sc, size)
+          context.lineTo(size, size)
           context.stroke()
           context.restore()
+    }
+
+    static drawSquareEdge(context : CanvasRenderingContext2D, deg : number, size : number, sc : number) {
+        context.save()
+        context.rotate(deg)
+        context.beginPath()
+        context.moveTo(size, size)
+        context.lineTo(size - 2 * size * sc, size)
+        context.stroke()
+        context.restore()
     }
 
     static drawDRLNode(context : CanvasRenderingContext2D, i : number, scale : number) {
@@ -59,11 +65,13 @@ class DrawingUtil {
         context.strokeStyle = foreColor
         context.save()
         context.translate(gap * (i + 1), h / 2)
+        context.rotate(Math.PI / 2 * sc2)
         var deg = 0
         for (var j = 0; j < lines; j++) {
             const sc : number = ScaleUtil.divideScale(sc1, j, lines)
             deg += (Math.PI / 2) * sc
-            DrawingUtil.drawDiagRotLine(context, deg, size, sc)
+            DrawingUtil.drawDiagLine(context, deg, size)
+            DrawingUtil.drawSquareEdge(context, j * Math.PI / 2, size, sc)
         }
         context.restore()
     }
